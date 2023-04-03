@@ -11,8 +11,18 @@ public class Televisore {
 	private LocalDate dataProduzione;
 	
 	
+	public Televisore() {}
 	public Televisore(String marca, String modello, int pollici, LocalDate dataProduzione) {
 		super();
+		this.marca = marca;
+		this.modello = modello;
+		this.pollici = pollici;
+		this.dataProduzione = dataProduzione;
+	}
+	
+	public Televisore(Long id, String marca, String modello, int pollici, LocalDate dataProduzione) {
+		super();
+		this.id = id;
 		this.marca = marca;
 		this.modello = modello;
 		this.pollici = pollici;
