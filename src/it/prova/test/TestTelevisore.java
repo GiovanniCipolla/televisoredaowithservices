@@ -1,6 +1,7 @@
 package it.prova.test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.prova.model.Televisore;
@@ -24,7 +25,13 @@ public class TestTelevisore {
 			
 //			testAggiorno(televisoreService);
 			
-			testElimino(televisoreService);
+//			testElimino(televisoreService);
+			
+//			testTelevisorePiuGrande(televisoreService);
+//			
+//			testQuantiTraLeDate(televisoreService);
+//			
+//			testMarcheDegliUltimiSeiMesi(televisoreService);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,18 +99,53 @@ public class TestTelevisore {
 		System.out.println(".......testUpdate fine.............");
 	}
 	//------------------------ METODO TEST ELIMINO -------------------------
-	private static void testElimino(TelevisoreService televisoreService) throws Exception {
-		System.out.println(".......testElimino inizio.............");
-		int result = 0;
+//	private static void testElimino(TelevisoreService televisoreService) throws Exception {
+//		System.out.println(".......testElimino inizio.............");
+//		int result = 0;
+//		
+//		result=televisoreService.elimino(televisoreService.lista().get(4));
+//
+//		if(result<1)
+//			throw new Exception("TEST FAILED");
+//
+//		System.out.println(".......testElimino fine.............");
+//		
+//	}
+	//---------------------------- METODO TEST televisorePiuGrande ------------------------------
+	private static void testTelevisorePiuGrande(TelevisoreService televisoreService) throws Exception {
+		System.out.println(".......testTelevisorePiuGrande inizio.............");
 		
-		result=televisoreService.elimino(televisoreService.lista().get(4));
+		
+		
+		System.out.println(televisoreService.televisorePiuGrande());
 
-		if(result<1)
-			throw new Exception("TEST FAILED");
+		
 
-		System.out.println(".......testElimino fine.............");
+		System.out.println(".......testTelevisorePiuGrande fine.............");
 		
 	}
-	
+		//---------------------------- METODO TEST quantiTraLeDate------------------------------
+	private static void testQuantiTraLeDate(TelevisoreService televisoreService) throws Exception {
+		System.out.println(".......testQuantiTraLeDate inizio.............");
+		
+		int result = 0;
+		LocalDate dataMin = LocalDate.parse("2000-01-01");
+		LocalDate dataMax = LocalDate.parse("2015-01-01");
+		result=televisoreService.quantiTraLeDate(dataMin, dataMax);
+		System.out.println(result);
+
+		System.out.println(".......testTelevisorePiuGrande fine.............");
+	}
+		//---------------------------- METODO TEST marcheDegliUltimiSeiMesi------------------------------
+	private static void testMarcheDegliUltimiSeiMesi(TelevisoreService televisoreService) throws Exception {
+		System.out.println(".......testMarcheDegliUltimiSeiMesi inizio.............");
+		
+		List<String> result = new ArrayList<>();
+		
+		result=televisoreService.marcheDegliUltimiSeiMesi();
+		System.out.println(result);
+
+		System.out.println(".......testMarcheDegliUltimiSeiMesi fine.............");
+	}
 	
 }

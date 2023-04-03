@@ -1,5 +1,6 @@
 package it.prova.service.televisore;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import it.prova.dao.televisore.TelevisoreDAO;
@@ -20,6 +21,12 @@ public interface TelevisoreService {
 	public int aggiorno(Televisore televisore) throws Exception;
 	
 	public int elimino(Televisore televisore) throws Exception;
+	
+	public Televisore televisorePiuGrande();
+	
+	public int quantiTraLeDate(LocalDate minimo,LocalDate massimo);
+	
+	public List<String> marcheDegliUltimiSeiMesi();
 	
 	
 	

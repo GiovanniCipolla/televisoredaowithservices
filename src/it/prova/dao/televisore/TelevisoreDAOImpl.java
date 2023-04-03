@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,20 +148,91 @@ public class TelevisoreDAOImpl extends AbstractMySQLDAO implements TelevisoreDAO
 		return result;
 	}
 	
-	public Televisore WantTvBiggest() {
-		// TODO Auto-generated method stub
-		return null;
+	public Televisore WantTvBiggest() throws Exception{
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+		Televisore result = null;
+		try (Statement s = connection.createStatement()) {
+
+			try (ResultSet rs = s
+					.executeQuery("select * from televisore where pollici = (select max(pollici) from televisore)")) {
+				if (rs.next()) {
+					result = new Televisore();
+					result.setId(rs.getLong("id"));
+					result.setMarca(rs.getString("marca"));
+					result.setModello(rs.getString("modello"));
+					result.setPollici(rs.getInt("pollici"));
+					result.setDataProduzione(
+							rs.getDate("dataproduzione") != null ? rs.getDate("dataproduzione").toLocalDate() : null);
+				}
+			} // niente catch qui
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
 	}
 
-	public int howManyTvMakeBetweenDate() {
-		// TODO Auto-generated method stub
-		return 0;
+
+	public int howManyTvMakeBetweenDate(LocalDate dataMin, LocalDate dataMax)throws Exception {
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+
+		if (dataMin == null || dataMax == null)
+			throw new Exception("Valore di input non ammesso.");
+
+		int count = 0;
+		Televisore temp = null;
+		try (PreparedStatement ps = connection
+				.prepareStatement("select * from televisore where dataproduzione between ? and ?")) {
+
+			ps.setDate(1, java.sql.Date.valueOf(dataMin));
+			ps.setDate(2, java.sql.Date.valueOf(dataMax));
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					count++;
+				}
+			} // niente catch qui
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return count;
 	}
 
-	public List wantBrandTvLastSixMonths() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> wantBrandTvLastSixMonths()throws Exception {
+		
+		if (isNotActive())
+			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
+		
+		List<String> result = new ArrayList<>();
+		
+		try (PreparedStatement ps = connection
+				.prepareStatement("select distinct (marca) from televisore where dataproduzione > ?;")) {
+			
+			ps.setDate(1, java.sql.Date.valueOf(LocalDate.now().minusMonths(6)));
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					String marcaTemp ="";
+					marcaTemp = rs.getString("marca");
+					result.add(marcaTemp);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+
+		}
+		return result;
 	}
+
+	
 
 
 	
